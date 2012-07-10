@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
-	"os"
-	"rand"
 	"regexp"
 	"time"
 
@@ -47,7 +46,7 @@ type Game struct {
 	maintenanceMsg string // if set, logins are disallowed.
 }
 
-func NewGame(worldPath string, listener net.Listener, serverDesc, maintenanceMsg string, maxPlayerCount int) (game *Game, err os.Error) {
+func NewGame(worldPath string, listener net.Listener, serverDesc, maintenanceMsg string, maxPlayerCount int) (game *Game, err error) {
 	worldStore, err := worldstore.LoadWorldStore(worldPath)
 	if err != nil {
 		return nil, err
@@ -123,8 +122,8 @@ func (game *Game) onPlayerConnect(newPlayer *player.Player) {
 // A player has disconnected from the server
 func (game *Game) onPlayerDisconnect(entityId EntityId) {
 	oldPlayer := game.players[entityId]
-	game.players[entityId] = nil, false
-	game.playerNames[oldPlayer.Name()] = nil, false
+	delete(game.players, entityId)
+	delete(game.playerNames, oldPlayer.Name())
 	game.entityManager.RemoveEntityById(entityId)
 
 	playerData := nbt.NewCompound()

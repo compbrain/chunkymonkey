@@ -4,6 +4,7 @@ import (
 	"compress/gzip"
 	"fmt"
 	"os"
+	"errors"
 	"path"
 
 	. "chunkymonkey/types"
@@ -93,10 +94,7 @@ func (s *chunkStoreAlpha) WriteChunk(writer IChunkWriter) (err error) {
 	}
 	defer file.Close()
 
-	gzipWriter, err := gzip.NewWriter(file)
-	if err != nil {
-		return
-	}
+	gzipWriter := gzip.NewWriter(file)
 	defer gzipWriter.Close()
 
 	if err = nbt.Write(gzipWriter, nbtWriter.RootTag()); err != nil {

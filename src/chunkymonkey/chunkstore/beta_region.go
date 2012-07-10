@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"path"
+"errors"
 
 	. "chunkymonkey/types"
 	"nbt"
@@ -42,7 +43,7 @@ func newRegionFile(filePath string) (rf *regionFile, err error) {
 		file: file,
 	}
 
-	if fi.Size == 0 {
+	if fi.Size() == 0 {
 		// Newly created region file. Create new header index if so.
 		if err = rf.offsets.Write(rf.file); err != nil {
 			return
@@ -160,9 +161,7 @@ func serializeChunkData(w *nbtChunkWriter) (chunkData []byte, err error) {
 	// Reserve room for the chunk data header at the start.
 	buffer := bytes.NewBuffer(make([]byte, chunkDataHeaderSize, chunkDataGuessSize))
 
-	if zlibWriter, err := zlib.NewWriter(buffer); err != nil {
-		return nil, err
-	} else {
+	zlibWriter := zlib.NewWriter(buffer)
 		if err = nbt.Write(zlibWriter, w.RootTag()); err != nil {
 			zlibWriter.Close()
 			return nil, err
@@ -170,7 +169,6 @@ func serializeChunkData(w *nbtChunkWriter) (chunkData []byte, err error) {
 		if err = zlibWriter.Close(); err != nil {
 			return nil, err
 		}
-	}
 	chunkData = buffer.Bytes()
 
 	// Write chunk data header

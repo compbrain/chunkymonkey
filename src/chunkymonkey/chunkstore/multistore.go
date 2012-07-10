@@ -1,7 +1,7 @@
 package chunkstore
 
 import (
-	"os"
+	"errors"
 
 	. "chunkymonkey/types"
 )

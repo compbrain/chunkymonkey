@@ -2,13 +2,13 @@ package player
 
 import (
 	"bytes"
+	"errors"
 	"expvar"
 	"flag"
 	"fmt"
 	"log"
-	"net"
-	"os"
 	"math/rand"
+	"net"
 	"sync"
 	"time"
 
@@ -613,7 +613,7 @@ func (player *Player) pingNew() {
 			// avoid misreading keep alive IDs.
 			player.ping.id = 1
 		}
-		player.ping.timestampNs = time.Nanoseconds()
+		player.ping.timestampNs = time.Now()
 
 		buf := new(bytes.Buffer)
 		proto.WriteKeepAlive(buf, player.ping.id)
@@ -658,13 +658,13 @@ func (player *Player) pingReceived(id int32) {
 	}
 
 	// Received valid keep-alive.
-	now := time.Nanoseconds()
+	now := time.Now()
 
 	if player.ping.timer != nil {
 		player.ping.timer.Stop()
 	}
 
-	latencyNs := now - player.ping.timestampNs
+	latencyNs := now.Sub(player.ping.timestampNs)
 	// Check that there wasn't an apparent time-shift on this before broadcasting
 	// this latency value.
 	if latencyNs >= 0 && latencyNs < PingTimeoutNs {
