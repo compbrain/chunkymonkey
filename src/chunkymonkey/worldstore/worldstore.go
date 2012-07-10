@@ -3,8 +3,8 @@
 package worldstore
 
 import (
-	"errors"
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"log"
 	"math/rand"

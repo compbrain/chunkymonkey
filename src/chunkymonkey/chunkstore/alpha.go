@@ -2,9 +2,9 @@ package chunkstore
 
 import (
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"os"
-	"errors"
 	"path"
 
 	. "chunkymonkey/types"

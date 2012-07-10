@@ -1,8 +1,8 @@
 package util
 
 import (
-	"os"
 	"io/ioutil"
+	"os"
 )
 
 // OpenFileUniqueName creates a file with a unique (and randomly generated)

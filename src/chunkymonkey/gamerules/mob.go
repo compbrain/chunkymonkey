@@ -1,9 +1,9 @@
 package gamerules
 
 import (
+	"errors"
 	"expvar"
 	"io"
-	"errors"
 
 	"chunkymonkey/nbtutil"
 	"chunkymonkey/physics"

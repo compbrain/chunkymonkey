@@ -1,8 +1,8 @@
 package gamerules
 
 import (
-	"io"
 	"errors"
+	"io"
 
 	"chunkymonkey/physics"
 	"chunkymonkey/proto"

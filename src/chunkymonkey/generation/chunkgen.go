@@ -6,9 +6,9 @@ import (
 	"chunkymonkey/chunkstore"
 	"chunkymonkey/gamerules"
 	. "chunkymonkey/types"
+	"math/rand"
 	"nbt"
 	"perlin"
-	"math/rand"
 	"time"
 )
 

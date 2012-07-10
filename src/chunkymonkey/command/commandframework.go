@@ -1,8 +1,8 @@
 package command
 
 import (
-	"strings"
 	"errors"
+	"strings"
 
 	"chunkymonkey/gamerules"
 )

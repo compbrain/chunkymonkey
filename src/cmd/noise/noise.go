@@ -95,7 +95,7 @@ func main() {
 	for row := 0; row < h; row++ {
 		for col := 0; col < w; col++ {
 			scaled := scale * (values[row*w+col] - base)
-			img.Set(col, row,  color.Gray{uint8(scaled)})
+			img.Set(col, row, color.Gray{uint8(scaled)})
 		}
 	}
 

@@ -5,11 +5,11 @@ import (
 	"compress/gzip"
 	"compress/zlib"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path"
-"errors"
 
 	. "chunkymonkey/types"
 	"nbt"
@@ -162,13 +162,13 @@ func serializeChunkData(w *nbtChunkWriter) (chunkData []byte, err error) {
 	buffer := bytes.NewBuffer(make([]byte, chunkDataHeaderSize, chunkDataGuessSize))
 
 	zlibWriter := zlib.NewWriter(buffer)
-		if err = nbt.Write(zlibWriter, w.RootTag()); err != nil {
-			zlibWriter.Close()
-			return nil, err
-		}
-		if err = zlibWriter.Close(); err != nil {
-			return nil, err
-		}
+	if err = nbt.Write(zlibWriter, w.RootTag()); err != nil {
+		zlibWriter.Close()
+		return nil, err
+	}
+	if err = zlibWriter.Close(); err != nil {
+		return nil, err
+	}
 	chunkData = buffer.Bytes()
 
 	// Write chunk data header

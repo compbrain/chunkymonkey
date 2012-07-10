@@ -1,9 +1,9 @@
 package window
 
 import (
-	"io"
-	"fmt"
 	"errors"
+	"fmt"
+	"io"
 
 	"chunkymonkey/gamerules"
 	. "chunkymonkey/types"

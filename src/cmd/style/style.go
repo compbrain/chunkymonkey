@@ -14,7 +14,7 @@ func main() {
 	flag.Parse()
 	filenames := flag.Args()
 	fset := token.NewFileSet()
-	pkgMap, firstErr := parser.ParseDir(fset, filenames[0], func (_ os.FileInfo) bool { return false }, parser.ImportsOnly)
+	pkgMap, firstErr := parser.ParseDir(fset, filenames[0], func(_ os.FileInfo) bool { return false }, parser.ImportsOnly)
 	if firstErr != nil {
 		fmt.Fprintf(os.Stderr, "Error while parsing: %v\n", firstErr)
 	}
