@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"rand"
+	"math/rand"
 	"time"
 
 	"chunkymonkey/chunkstore"

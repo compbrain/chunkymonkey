@@ -14,7 +14,7 @@ func main() {
 	flag.Parse()
 	filenames := flag.Args()
 	fset := token.NewFileSet()
-	pkgMap, firstErr := parser.ParseFiles(fset, filenames, 0)
+	pkgMap, firstErr := parser.ParseDir(fset, filenames[0], func (_ os.FileInfo) bool { return false }, parser.ImportsOnly)
 	if firstErr != nil {
 		fmt.Fprintf(os.Stderr, "Error while parsing: %v\n", firstErr)
 	}
@@ -88,7 +88,7 @@ func (v *NodeChecker) checkMethod(f *ast.FuncDecl) {
 
 func (v *NodeChecker) checkTypeName(typeSpec *ast.TypeSpec) {
 	name := typeSpec.Name.Name
-	switch t := typeSpec.Type.(type) {
+	switch typeSpec.Type.(type) {
 	case *ast.InterfaceType:
 		if !v.InterfaceName.MatchString(name) {
 			v.report(typeSpec.Name.NamePos, "Bad name for interface %q\n", name)

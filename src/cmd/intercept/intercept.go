@@ -16,7 +16,7 @@ var recordBase = flag.String(
 
 type RelayReport struct {
 	written int64
-	err     os.Error
+	err     error
 }
 
 // Sends a report on reportChan when it completes
@@ -95,10 +95,10 @@ func serveConn(clientConn net.Conn, remoteaddr string, connNumber int) {
 	logger.Print("Client disconnected")
 }
 
-func serve(localaddr, remoteaddr string) (err os.Error) {
+func serve(localaddr, remoteaddr string) (err error) {
 	listener, err := net.Listen("tcp", localaddr)
 	if err != nil {
-		log.Fatal("Listen: ", err.String())
+		log.Fatal("Listen: ", err.Error())
 		return
 	}
 
@@ -110,7 +110,7 @@ func serve(localaddr, remoteaddr string) (err os.Error) {
 	for {
 		clientConn, acceptErr := listener.Accept()
 		if acceptErr != nil {
-			log.Printf("Accept error: %s", acceptErr.String())
+			log.Printf("Accept error: %s", acceptErr.Error())
 			break
 		} else {
 			go serveConn(clientConn, remoteaddr, connNumber)

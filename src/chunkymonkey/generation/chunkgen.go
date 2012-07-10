@@ -8,7 +8,7 @@ import (
 	. "chunkymonkey/types"
 	"nbt"
 	"perlin"
-	"rand"
+	"math/rand"
 	"time"
 )
 
@@ -135,11 +135,11 @@ func (s *TestGenerator) Writer() chunkstore.IChunkWriter {
 	return nil
 }
 
-func (s *TestGenerator) WriteChunk(writer chunkstore.IChunkWriter) os.Error {
-	return os.NewError("writes not supported by TestGenerator")
+func (s *TestGenerator) WriteChunk(writer chunkstore.IChunkWriter) error {
+	return errors.New("writes not supported by TestGenerator")
 }
 
-func (gen *TestGenerator) ReadChunk(chunkLoc ChunkXz) (reader chunkstore.IChunkReader, err os.Error) {
+func (gen *TestGenerator) ReadChunk(chunkLoc ChunkXz) (reader chunkstore.IChunkReader, err error) {
 	baseBlockXyz := chunkLoc.ChunkCornerBlockXY()
 
 	baseX, baseZ := baseBlockXyz.X, baseBlockXyz.Z

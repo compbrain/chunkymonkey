@@ -1,7 +1,7 @@
 package gamerules
 
 import (
-	"rand"
+	"math/rand"
 	. "chunkymonkey/types"
 	"log"
 )

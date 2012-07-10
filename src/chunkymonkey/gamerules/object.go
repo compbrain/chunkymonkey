@@ -5,7 +5,7 @@ package gamerules
 
 import (
 	"io"
-	"os"
+	"errors"
 
 	"chunkymonkey/physics"
 	"chunkymonkey/proto"
@@ -31,21 +31,21 @@ func NewObject(objType ObjTypeId) (object *Object) {
 	return
 }
 
-func (object *Object) UnmarshalNbt(tag *nbt.Compound) (err os.Error) {
+func (object *Object) UnmarshalNbt(tag *nbt.Compound) (err error) {
 	if err = object.PointObject.UnmarshalNbt(tag); err != nil {
 		return
 	}
 
 	var typeName string
 	if entityObjectId, ok := tag.Lookup("id").(*nbt.String); !ok {
-		return os.NewError("missing object type id")
+		return errors.New("missing object type id")
 	} else {
 		typeName = entityObjectId.Value
 	}
 
 	var ok bool
 	if object.ObjTypeId, ok = ObjTypeByName[typeName]; !ok {
-		return os.NewError("unknown object type id")
+		return errors.New("unknown object type id")
 	}
 
 	// TODO load orientation
@@ -53,10 +53,10 @@ func (object *Object) UnmarshalNbt(tag *nbt.Compound) (err os.Error) {
 	return
 }
 
-func (object *Object) MarshalNbt(tag *nbt.Compound) (err os.Error) {
+func (object *Object) MarshalNbt(tag *nbt.Compound) (err error) {
 	objTypeName, ok := ObjNameByType[object.ObjTypeId]
 	if !ok {
-		return os.NewError("unknown object type")
+		return errors.New("unknown object type")
 	}
 	if err = object.PointObject.MarshalNbt(tag); err != nil {
 		return
@@ -66,7 +66,7 @@ func (object *Object) MarshalNbt(tag *nbt.Compound) (err os.Error) {
 	return
 }
 
-func (object *Object) SendSpawn(writer io.Writer) (err os.Error) {
+func (object *Object) SendSpawn(writer io.Writer) (err error) {
 	// TODO: Send non-nil ObjectData (is there any?)
 	err = proto.WriteObjectSpawn(writer, object.EntityId, object.ObjTypeId, &object.PointObject.LastSentPosition, nil)
 	if err != nil {
@@ -77,7 +77,7 @@ func (object *Object) SendSpawn(writer io.Writer) (err os.Error) {
 	return
 }
 
-func (object *Object) SendUpdate(writer io.Writer) (err os.Error) {
+func (object *Object) SendUpdate(writer io.Writer) (err error) {
 	if err = proto.WriteEntity(writer, object.EntityId); err != nil {
 		return
 	}
