@@ -38,7 +38,7 @@ func (s *chunkStoreAlpha) chunkPath(chunkLoc ChunkXz) string {
 func (s *chunkStoreAlpha) ReadChunk(chunkLoc ChunkXz) (reader IChunkReader, err error) {
 	file, err := os.Open(s.chunkPath(chunkLoc))
 	if err != nil {
-		if errno, ok := util.Errno(err); ok && errno == os.ENOENT {
+		if os.IsNotExist(err) {
 			err = NoSuchChunkError(false)
 		}
 		return

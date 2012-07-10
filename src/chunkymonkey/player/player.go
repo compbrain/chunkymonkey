@@ -613,7 +613,7 @@ func (player *Player) pingNew() {
 			// avoid misreading keep alive IDs.
 			player.ping.id = 1
 		}
-		player.ping.timestampNs = time.Now()
+		player.ping.timestampNs = time.Now().UnixNano()
 
 		buf := new(bytes.Buffer)
 		proto.WriteKeepAlive(buf, player.ping.id)
@@ -664,7 +664,7 @@ func (player *Player) pingReceived(id int32) {
 		player.ping.timer.Stop()
 	}
 
-	latencyNs := now.Sub(player.ping.timestampNs)
+	latencyNs := now.Sub(time.Unix(0, player.ping.timestampNs))
 	// Check that there wasn't an apparent time-shift on this before broadcasting
 	// this latency value.
 	if latencyNs >= 0 && latencyNs < PingTimeoutNs {

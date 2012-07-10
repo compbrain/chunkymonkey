@@ -1,7 +1,7 @@
 package generation
 
 import (
-	"os"
+	"errors"
 
 	"chunkymonkey/chunkstore"
 	"chunkymonkey/gamerules"
@@ -81,7 +81,7 @@ type TestGenerator struct {
 func NewTestGenerator(seed int64) *TestGenerator {
 	perlin := perlin.NewPerlinNoise(seed)
 
-	randSource := rand.NewSource(time.Nanoseconds())
+	randSource := rand.NewSource(time.Now().UnixNano())
 	randGen := rand.New(randSource)
 
 	return &TestGenerator{
